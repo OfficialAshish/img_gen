@@ -25,7 +25,7 @@ def generateView(request):
         prompt = request.POST.get("text")
         number = int(request.POST.get("number"))
         style = request.POST.get('art_style')
-        print(style)
+        # print(style)#default is 3d
         if len(prompt) > 250:
             return HttpResponse("ValidText is required(max len 250).", status=400)
 

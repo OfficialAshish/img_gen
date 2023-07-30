@@ -3,16 +3,23 @@ from decouple import config
 from django.shortcuts import get_object_or_404, render, HttpResponse
 import requests,json,os
 from .models import GeneratedImage
+from django.core.paginator import Paginator
 from django.core.files.base import ContentFile
 
 # def home(request):
 #     return render(request, 'includes/index.html')
 
+
 def galleryView(request):
     generated_images = GeneratedImage.objects.all().order_by('-created_at')
+    paginator = Paginator(generated_images, 2)  
+
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)  
     return render(
-        request, "img_api/img_gallery.html", {"old_image_objects": generated_images}
+        request, "img_api/img_gallery.html", {"page_obj": page_obj}
     )
+
 
 def detailView(request,id=None):
     obj = get_object_or_404(GeneratedImage,id=id)

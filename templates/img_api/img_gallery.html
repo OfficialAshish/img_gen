@@ -5,18 +5,28 @@
 {% block main_content %}
 
 <div class='main'>
-{% if old_image_objects %}
   <div class="image-container ">
-    {% for image in old_image_objects %}
+    {% for image in page_obj %}
       <div class="image-item">
         <img src="{{ image.image.url }}" alt="Generated Image">
         <a href="{{ image.image.url }}">View Image</a>
       </div>
     {% endfor %}
-    </div>
-    {% else %}
-    <p>No images available.</p>
+  </div>
+
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page=1">First</a>
+      <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+    {% endif %}
+
+    <span class="current-page">{{ page_obj.number }}</span>
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">Next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}"> Last</a>
     {% endif %}
   </div>
+</div>
 
 {% endblock main_content %}

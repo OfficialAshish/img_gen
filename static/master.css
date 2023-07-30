@@ -17,24 +17,50 @@ body {
 
 
 /* header ---------------- */
-
 @keyframes bgSnake {
   0% {
-    background-position: 0 0;
+    background: linear-gradient(0deg, #233241 10%, #222f3d 90%);
   }
-
+  10% {
+    background: linear-gradient(36deg, #233241 10%, #222f3d 90%);
+  }
+  20% {
+    background: linear-gradient(72deg, #233241 10%, #222f3d 90%);
+  }
+  10% {
+    bac9ground: linear-gradient(108deg, #233241 10%, #222f3d 90%);
+  }
+  40% {
+    background: linear-gradient(144deg, #233241 10%, #222f3d 90%);
+  }
+  50% {
+    background: linear-gradient(180deg, #233241 10%, #222f3d 90%);
+  }
+  60% {
+    background: linear-gradient(216deg, #233241 10%, #222f3d 90%);
+  }
+  70% {
+    background: linear-gradient(252deg, #233241 10%, #222f3d 90%);
+  }
+  80% {
+    background: linear-gradient(288deg, #233241 10%, #222f3d 90%);
+  }
+  90% {
+    background: linear-gradient(324deg, #233241 10%, #222f3d 90%);
+  }
   100% {
-    background-position: 100% 0;
+    background: linear-gradient(360deg, #233241 10%, #222f3d 90%);
   }
 }
+
+
 
 .header {
   display: flex;
   justify-content: space-between;
   height: 4rem;
-  background: linear-gradient(0deg, #222f3d 1.18%, #14202e 100%);
-  /* background-size: 200% 200%; */
-  animation: bgSnake 4s linear infinite;
+  background: linear-gradient(0deg, #32495f 10%, #222f3d 50%);
+  /* animation: bgSnake 2s linear infinite; */
 }
 
 .header-logo {
@@ -59,7 +85,7 @@ body {
   }
 
   75% {
-    color: #b2b2ff;
+    color: #7f7fde;
   }
 
   100% {
@@ -178,7 +204,7 @@ select {
 .fm-btn {
   border-radius: 7px;
   margin: .5rem auto 10px auto;
-  width: 40%;
+  width: 50%;
   height: 40px;
   background: linear-gradient(1deg, #38b7e1b6 5.18%, #ffffff 100%);
   cursor: pointer;
@@ -241,7 +267,28 @@ select {
   cursor: pointer;
 }
 
+.pagination {
+  font-size: smaller;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+}
 
+.pagination a,
+.pagination .current-page {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.pagination .current-page {
+  background-color: #f3f6f9;
+  color: #282828;
+}
 
 @media (max-width: 770px) {
   .image-gallery {

@@ -12,7 +12,7 @@ from django.core.files.base import ContentFile
 
 def galleryView(request):
     generated_images = GeneratedImage.objects.all().order_by('-created_at')
-    paginator = Paginator(generated_images, 2)  
+    paginator = Paginator(generated_images, 15)  
 
     page_number = request.GET.get('page')  
     page_obj = paginator.get_page(page_number)  

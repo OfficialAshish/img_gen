@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 import os
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dummysec:key')
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') != 'False'
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 
 TEMPLATE_DIR = BASE_DIR / "templates"

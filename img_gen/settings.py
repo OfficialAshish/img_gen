@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 import os
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dummykey')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dummysec:key')
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 

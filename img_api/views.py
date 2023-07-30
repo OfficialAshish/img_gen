@@ -40,7 +40,7 @@ def generateView(request):
             new_img_objects = []
             for i, image in enumerate(api_response):
                 image_data = base64.b64decode(image["base64"])
-                img_name = f"v30_txt2img_{i}.png"
+                img_name = f"v40_txt2img_{i}.png"
                 image_file = ContentFile(image_data, name=img_name)
                 generated_image = GeneratedImage.objects.create(
                     user=user,

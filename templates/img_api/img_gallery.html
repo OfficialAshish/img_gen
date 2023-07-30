@@ -1,0 +1,22 @@
+{% extends "includes/base.html" %}
+
+{% block title %} AiImg Generator {% endblock %}
+
+{% block main_content %}
+
+<div class='main'>
+{% if old_image_objects %}
+  <div class="image-container ">
+    {% for image in old_image_objects %}
+      <div class="image-item">
+        <img src="{{ image.image.url }}" alt="Generated Image">
+        <a href="{{ image.image.url }}">View Image</a>
+      </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <p>No images available.</p>
+    {% endif %}
+  </div>
+
+{% endblock main_content %}

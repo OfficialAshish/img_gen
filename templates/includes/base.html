@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '\master.css' %}">
+    
+    <title> {% block title %} {% endblock %}</title>
+</head>
+
+<body>
+    <nav >
+    <div class='header'>
+            <img src="{% static 'logo.png' %}" class='header-logo' />
+        <h2>Image Generator</h2>
+    </div>
+    <div class="panel-link">
+        <ul>
+        <i class="arrow-right"></i>
+        <a href={% url 'img_api:image-generate' %}>Generate</a>
+        <span>/</span>
+        <a href={% url 'img_api:image-gallery' %}>Gallery</a>
+        </ul>   
+    </div>
+    </nav>
+   
+    
+    {% block main_content %}
+    
+    {% endblock main_content %}
+
+    <footer>
+
+        {% block footer %}
+        {% include 'includes/footer_p2.html' %} 
+        {% endblock footer %} 
+     
+    </footer>
+</body>
+
+</html>

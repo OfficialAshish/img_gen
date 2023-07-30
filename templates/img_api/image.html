@@ -1,0 +1,22 @@
+{% extends "includes/base.html" %}
+
+{% block title %} AiImg Generator {% endblock %}
+
+{% block main_content %}
+
+<div class='main'>
+    {% if image_object %}
+    <div class="image-container">
+        <div class="image-item">
+            <p class="prompt-text">For Prompt: {{ g_img.text }}</p>
+            <img src="{{ image_object.image.url }}" alt=" Image detail">
+            <p class="created-at">Generated at: {{ g_img.created_at }}</p>
+
+        </div>
+    </div>
+    {% else %}
+    <p>No images available.</p>
+    {% endif %}
+</div>
+
+{% endblock main_content %}

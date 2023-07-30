@@ -1,0 +1,87 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Img Generator{% endblock %}
+
+{% block main_content %}
+
+<div class="main">
+    <form method="POST" class="form">
+        {% csrf_token %}
+        <input name="text" placeholder="Description about image..." required>
+        <input name="number" type="number" step="1" min="0" max="10" placeholder="How many images? (max-10)" required>
+        
+    
+        <div class='select-container' id='select-art'>
+            <label for="art_style">Select Art Style:</label>
+            <select id="art_style" name="art_style">
+            <option value="3d-model">-style?(opt)-</option>
+            <option value="3d-model">3D Model</option>
+            <option value="analog-film">Analog Film</option>
+            <option value="anime">Anime</option>
+            <option value="cinematic">Cinematic</option>
+            <option value="comic-book">Comic Book</option>
+            <option value="digital-art">Digital Art</option>
+            <option value="enhance">Enhance</option>
+            <option value="fantasy-art">Fantasy Art</option>
+            <option value="isometric">Isometric</option>
+            <option value="line-art">Line Art</option>
+            <option value="low-poly">Low Poly</option>
+            <option value="modeling-compound">Modeling Compound</option>
+            <option value="neon-punk">Neon Punk</option>
+            <option value="origami">Origami</option>
+            <option value="photographic">Photographic</option>
+            <option value="pixel-art">Pixel Art</option>
+            <option value="tile-texture">Tile Texture</option>
+            </select>
+            </div>
+      
+        <button type="submit" class="fm-btn">Generate 🖼️</button>
+    </form>
+
+    <div class="section2-out">
+        {% if new_image_objects %}
+        <span class="prompt-text">For Prompt: {{ prompt }}</span>
+        <div class="image-container">
+            {% for g_img in new_image_objects %}
+            <div class="image-item">
+                <img src="{{ g_img.image.url }}" alt="Generated new Image">
+                <a href="{{ g_img.image.url }}">View Image</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <h3 id="generating">Generating...</h3>
+        {% endif %}
+        {% comment %} {% if old_image_objects %}
+        <h3 class="previous-text">Previous images...</h3>
+        <div class="image-container">
+                {% for g_img in old_image_objects %}
+                <div class="image-item">
+                    <img src="{{ g_img.image.url }}" alt="Old Image">
+                    <a href="{{ g_img.image.url }}">View Image</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <h3 id="login" >Login to save..</h3>
+        {% endif %} {% endcomment %}
+
+    </div>
+</div>
+<script>
+    document.querySelector('.form').addEventListener('submit', function() {
+        document.getElementById('generating').style.display = 'block';
+    });
+    
+    {% if new_image_objects %}
+    {% comment %} document.getElementById('login').style.display = 'block'; {% endcomment %}
+    {% else %}
+        document.getElementById('generating').style.display = 'none';
+        document.getElementById('login').style.display = 'none';
+    {% endif %}
+    
+</script>
+
+{% include 'includes/footer_p1.html' %}
+{% endblock main_content %}
+

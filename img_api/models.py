@@ -6,6 +6,7 @@ class GeneratedImage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     text = models.CharField(max_length=250,blank=True,null=True)
     image = models.ImageField(upload_to='images')
+    json_response = models.JSONField(("api_json"),blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     # image_url = models.URLField(unique=True)

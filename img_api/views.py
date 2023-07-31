@@ -5,25 +5,41 @@ import requests,json,os
 from .models import GeneratedImage
 from django.core.paginator import Paginator
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 
 # def home(request):
 #     return render(request, 'includes/index.html')
 
-
 def galleryView(request):
     generated_images = GeneratedImage.objects.all().order_by('-created_at')
-    paginator = Paginator(generated_images, 15)  
+    regenerated_images = []
+    for image_obj in generated_images:
+        if not default_storage.exists(image_obj.image.name):
+            print("regenerated...")
+            # If the image file is missing, regenerate it from the saved JSON response
+            api_response = image_obj.json_response
+            if api_response:
+                image_data = base64.b64decode(api_response["base64"])
+                img_name = f"v5_txt2img_reg{image_obj.id}.png"
+                image_file = ContentFile(image_data, name=img_name)
+                image_obj.image = image_file
+                image_obj.save()
+                regenerated_images.append(image_obj)
+        else:
+            regenerated_images.append(image_obj)
+        
+    paginator = Paginator(regenerated_images, 15)
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
 
-    page_number = request.GET.get('page')  
-    page_obj = paginator.get_page(page_number)  
     return render(
-        request, "img_api/img_gallery.html", {"page_obj": page_obj}
+        request, "img_api/img_gallery.html", {"page_obj": page_object}
     )
 
 
 def detailView(request,id=None):
     obj = get_object_or_404(GeneratedImage,id=id)
-    return render(request,'img_api/image.html',{ "image_object":obj})
+    return render(request,'img_api/image.html',{"image_object":obj})
 
 
 def generateView(request):
@@ -38,26 +54,29 @@ def generateView(request):
 
         # Generate images using API
         api_response = generate_images(prompt,number,style)
+        # with open(r'.\media\response_api1080.json','+w') as f:
+            # json.dump(api_response,f)
         # with open(r'.\media\response_api.json','r') as f:
         #     api_response = json.load(f)
         if api_response:
             
             user = request.user if request.user.is_authenticated else None
                     # image=ImageFile(open(image_path, 'rb')),
-            new_img_objects = []
+            generated_images_list = []
             for i, image in enumerate(api_response):
                 image_data = base64.b64decode(image["base64"])
                 img_name = f"v40_txt2img_{i}.png"
                 image_file = ContentFile(image_data, name=img_name)
-                generated_image = GeneratedImage.objects.create(
+                generate_image = GeneratedImage(
                     user=user,
                     image=image_file,
                     text=prompt,
+                    json_response = image,
                 )
-                generated_image.save()
-                new_img_objects.append(generated_image)
-            
-            context['new_image_objects'] = new_img_objects
+                generated_images_list.append(generate_image)
+
+            GeneratedImage.objects.bulk_create(generated_images_list)
+            context['new_image_objects'] = generated_images_list
             context['prompt']=prompt      
         else:
             return HttpResponse("Image generation failed.", status=500)

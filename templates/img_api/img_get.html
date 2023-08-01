@@ -73,12 +73,12 @@
         document.getElementById('generating').style.display = 'block';
     });
     
-    {% if new_image_objects %}
-    {% comment %} document.getElementById('login').style.display = 'block'; {% endcomment %}
+    {% comment %} {% if new_image_objects %}
+    document.getElementById('login').style.display = 'block';
     {% else %}
-        document.getElementById('generating').style.display = 'none';
-        document.getElementById('login').style.display = 'none';
-    {% endif %}
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('generating').style.display = 'none';
+    {% endif %} {% endcomment %}
     
 </script>
 

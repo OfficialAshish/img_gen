@@ -1,32 +1,40 @@
 import base64
-from decouple import config
 from django.shortcuts import get_object_or_404, render, HttpResponse
 import requests,json,os
 from .models import GeneratedImage
 from django.core.paginator import Paginator
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db import IntegrityError
 
-# def home(request):
-#     return render(request, 'includes/index.html')
 
 def galleryView(request):
     generated_images = GeneratedImage.objects.all().order_by('-created_at')
     regenerated_images = []
+    updated_image_objs = []
+
     for image_obj in generated_images:
         if not default_storage.exists(image_obj.image.name):
-            print("regenerated...")
-            # If the image file is missing, regenerate it from the saved JSON response
-            api_response = image_obj.json_response
-            if api_response:
-                image_data = base64.b64decode(api_response["base64"])
-                img_name = f"v5_txt2img_reg{image_obj.id}.png"
+            # If the image file is missing, regenerate it from the saved img bytes
+            image_data = image_obj.img_bytes
+            if image_data:
+                img_name = f"v5_txt2img_N{image_obj.id}.png"
                 image_file = ContentFile(image_data, name=img_name)
                 image_obj.image = image_file
-                image_obj.save()
-                regenerated_images.append(image_obj)
+                updated_image_objs.append(image_obj)
+                # image_obj.save()
+                # regenerated_images.append(image_obj)
+                print("regenerated..")
+            else:
+                print("no image data bytes in object")
         else:
             regenerated_images.append(image_obj)
+    
+    try:
+        GeneratedImage.objects.bulk_update(updated_image_objs,['image'])
+        print(f'{len(updated_image_objs)} images regenerated..')
+    except IntegrityError as inE:
+        print(f"Error while regenerating img : {inE}")
         
     paginator = Paginator(regenerated_images, 15)
     page_number = request.GET.get('page')
@@ -71,7 +79,7 @@ def generateView(request):
                     user=user,
                     image=image_file,
                     text=prompt,
-                    json_response = image,
+                    img_bytes = image_data,
                 )
                 generated_images_list.append(generate_image)
 
@@ -120,11 +128,4 @@ def generate_images(prompt,number,style):
     data = response.json()
     return data.get("artifacts", [])
 
-# def save_generated_images(api_response):
-#     saved_image_data = {"image_data": []}
-    
-#     for i, image in enumerate(generated_images):
-#         image_data = base64.b64decode(image["base64"])
-#         saved_image_data["image_data"].append(image_data)
-    
-#     return saved_image_data
+

@@ -151,6 +151,7 @@ ul span {
 
 #generating {
   text-align: center;
+  display: none;
 }
 
 .prompt-text {

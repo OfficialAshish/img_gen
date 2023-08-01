@@ -11,7 +11,7 @@ __pycache__/
 *test*
 /media/images/*
 /staticfiles/*
-img_api/migrations/*
+# img_api/migrations/*
 # Text backup files
 *.bak
 

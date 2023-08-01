@@ -16,7 +16,7 @@ def galleryView(request):
                 # If the image file is missing, regenerate it from the saved img bytes
                 image_data = image_obj.img_bytes
                 if image_data:
-                    img_name = f"v5_txt2img_N{image_obj.id}.png"
+                    img_name = f"v6_txt2img_N{image_obj.id}.png"
                     image_file = ContentFile(image_data, name=img_name)
                     image_obj.image = image_file
                     image_obj.save()
@@ -89,6 +89,7 @@ def generateView(request):
             generated_images_old = GeneratedImage.objects.filter(user=request.user)
             context["old_image_objects"] = generated_images_old
 
+        print("n")
         return render(request, "img_api/img_get.html", context)
     
     except Exception as e:
